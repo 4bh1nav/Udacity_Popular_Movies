@@ -45,7 +45,7 @@ public class MovieListFragment extends Fragment{
     private String LOAD_MOST_POPULAR= "Most Popular";
     private String LOAD_TOP_RATED= "Top Rated";
 
-    private static final String API_KEY = "aeed02b7bd987a5b2345d47d16145f4f" ;
+    private static final String API_KEY = "" ;
     private MoviesGridAdapter moviesGridAdapter;
 
     @BindView(R.id.movies_recycler_view) RecyclerView moviesRecyclerView;
