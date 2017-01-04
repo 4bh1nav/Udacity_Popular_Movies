@@ -20,7 +20,7 @@ import retrofit2.http.Query;
  * Created by ron on 17/10/16.
  */
 
-public class retrofitService {
+public class RetrofitService {
 
     public static final String BASE_URL = "http://api.themoviedb.org/3/";
 

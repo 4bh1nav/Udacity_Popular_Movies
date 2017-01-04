@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
 import abhi.com.popularmovies.R;
 import abhi.com.popularmovies.data.model.MovieData;
 import abhi.com.popularmovies.data.model.Result;
-import abhi.com.popularmovies.rest.retrofitService;
+import abhi.com.popularmovies.rest.RetrofitService;
 import abhi.com.popularmovies.ui.adapter.MoviesGridAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,11 +42,11 @@ import retrofit2.Response;
 public class MovieListFragment extends Fragment{
 
     private static final String MOVIESTATE = "Movie_state";
-    private retrofitService.movieApiInterface movieApi;
+    private RetrofitService.movieApiInterface movieApi;
     private String LOAD_MOST_POPULAR= "Most Popular";
     private String LOAD_TOP_RATED= "Top Rated";
 
-    private static final String API_KEY = "" ;
+    private static final String API_KEY = "aeed02b7bd987a5b2345d47d16145f4f" ;
     private MoviesGridAdapter moviesGridAdapter;
 
     @BindView(R.id.movies_recycler_view) RecyclerView moviesRecyclerView;
@@ -67,7 +68,7 @@ public class MovieListFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        movieApi = retrofitService.getClient();
+        movieApi = RetrofitService.getClient();
 
     }
 
@@ -125,7 +126,7 @@ public class MovieListFragment extends Fragment{
     }
 
 
-    private void loadMovies(String sort){
+    private void loadMovies(final String sort){
 
         if (isOnline()){
             if (LOAD_MOST_POPULAR.equals(sort)){
@@ -141,7 +142,8 @@ public class MovieListFragment extends Fragment{
 
                     @Override
                     public void onFailure(Call<Result> call, Throwable t) {
-
+                        Toast toast = Toast.makeText(getContext(), R.string.failure_error,Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 });
             }else{
@@ -157,6 +159,8 @@ public class MovieListFragment extends Fragment{
 
                     @Override
                     public void onFailure(Call<Result> call, Throwable t) {
+                        Toast toast = Toast.makeText(getContext(), R.string.failure_error,Toast.LENGTH_SHORT);
+                        toast.show();
 
                     }
                 });
@@ -176,7 +180,9 @@ public class MovieListFragment extends Fragment{
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(MOVIESTATE,new ArrayList<Parcelable>(moviesGridAdapter.getItems()));
+        if(moviesGridAdapter != null){
+            outState.putParcelableArrayList(MOVIESTATE,new ArrayList<Parcelable>(moviesGridAdapter.getItems()));
+        }
         super.onSaveInstanceState(outState);
     }
 
