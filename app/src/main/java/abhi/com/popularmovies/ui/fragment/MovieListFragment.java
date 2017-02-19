@@ -24,12 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abhi.com.popularmovies.R;
+import abhi.com.popularmovies.data.model.Favorite;
 import abhi.com.popularmovies.data.model.MovieData;
 import abhi.com.popularmovies.data.model.Result;
 import abhi.com.popularmovies.rest.RetrofitService;
+import abhi.com.popularmovies.ui.adapter.FavoriteAdapter;
 import abhi.com.popularmovies.ui.adapter.MoviesGridAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,10 +51,12 @@ public class MovieListFragment extends Fragment{
     private String LOAD_MOST_POPULAR= "Most Popular";
     private String LOAD_TOP_RATED= "Top Rated";
 
-    private static final String API_KEY = "aeed02b7bd987a5b2345d47d16145f4f" ;
+    private static final String API_KEY = "" ;
     private MoviesGridAdapter moviesGridAdapter;
 
     @BindView(R.id.movies_recycler_view) RecyclerView moviesRecyclerView;
+    private Realm realm;
+
     public MovieListFragment() {
         // Required empty public constructor
     }
@@ -69,6 +76,8 @@ public class MovieListFragment extends Fragment{
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         movieApi = RetrofitService.getClient();
+        Realm.init(getContext());
+        realm = Realm.getDefaultInstance();
 
     }
 
@@ -119,9 +128,25 @@ public class MovieListFragment extends Fragment{
             case R.id.top_rated:
                 loadMovies(LOAD_TOP_RATED);
                 return true;
+            case R.id.favorite_menu:
+                loadFavoriteMoviesFromDb();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+    }
+
+    private void loadFavoriteMoviesFromDb(){
+        // Build the query looking at all users:
+        RealmQuery<Favorite> query = realm.where(Favorite.class);
+
+        // Execute the query:
+        RealmResults<Favorite> db = query.findAll();
+
+        FavoriteAdapter favoriteAdapter = new FavoriteAdapter(getContext(),db,true);
+        moviesRecyclerView.setAdapter(favoriteAdapter);
 
     }
 

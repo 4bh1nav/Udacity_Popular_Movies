@@ -46,6 +46,7 @@
 
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/favorite_movie_button"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
@@ -66,10 +67,14 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:elevation="4dp"
                     app:cardElevation="4dp"
                     tools:layout_marginTop="@dimen/activity_horizontal_margin"
@@ -83,20 +88,20 @@
                         android:orientation="vertical"
                         android:padding="@dimen/card_margin">
 
-                    <TextView
-                        style="@android:style/TextAppearance.Material.Subhead"
-                        android:id="@+id/movie_overview_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/overview"
-                        android:textStyle="bold"/>
+                        <TextView
+                            style="@android:style/TextAppearance.Material.Subhead"
+                            android:id="@+id/movie_overview_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/overview"
+                            android:textStyle="bold"/>
 
-                    <TextView
-                        style="@android:style/TextAppearance.Material.Body2"
-                        android:id="@+id/movie_overview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
+                        <TextView
+                            style="@android:style/TextAppearance.Material.Body2"
+                            android:id="@+id/movie_overview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            />
 
                         <TextView
                             style="@android:style/TextAppearance.Material.Subhead"
@@ -129,8 +134,49 @@
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="4dp"
+                    app:cardElevation="4dp"
+                    tools:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/card_margin"
+                    android:layout_marginLeft="@dimen/card_margin"
+                    android:layout_marginBottom="@dimen/card_margin">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/trailers_recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/review_cardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="4dp"
+                    app:cardElevation="4dp"
+                    tools:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/card_margin"
+                    android:layout_marginLeft="@dimen/card_margin"
+                    android:layout_marginBottom="@dimen/card_margin">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/reviews_recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
-
 
 </android.support.design.widget.CoordinatorLayout>

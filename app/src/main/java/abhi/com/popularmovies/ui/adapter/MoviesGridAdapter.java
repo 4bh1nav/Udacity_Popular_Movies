@@ -34,6 +34,7 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Vi
     public MoviesGridAdapter(Fragment fragment, List<MovieData> movies) {
         mFragment = fragment;
         mItems = movies;
+
     }
 
     @Override

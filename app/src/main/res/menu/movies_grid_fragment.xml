@@ -13,4 +13,10 @@
         app:showAsAction="collapseActionView"
         />
 
+    <item
+        android:id="@+id/favorite_menu"
+        android:title="Favorites"
+        app:showAsAction="collapseActionView"
+        />
+
 </menu>

@@ -5,7 +5,10 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
+import abhi.com.popularmovies.data.model.Movie;
 import abhi.com.popularmovies.data.model.Result;
+import abhi.com.popularmovies.data.model.Review;
+import abhi.com.popularmovies.data.model.Video;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,6 +17,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -68,7 +72,13 @@ public class RetrofitService {
 
         @GET("movie/top_rated")
         Call<Result> getTopRatedMovies (@Query("api_key") String api_key);
-    }
+
+        @GET("movie/{id}/videos") Call<Video.Result> getMovieVideos(@Path("id") long movieId, @Query("api_key") String api_key);
+
+        @GET("movie/{id}/reviews") Call<Review.Result> getMovieReviews(@Path("id") long movieId, @Query("api_key") String api_key);
+
+        @GET("movie/{movie_id}") Call<Movie> getMovie(@Path("movie_id") long movieId, @Query("api_key") String api_key);
+}
 
 
 }

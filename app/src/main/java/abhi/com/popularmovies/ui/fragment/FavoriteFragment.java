@@ -1,6 +1,5 @@
 package abhi.com.popularmovies.ui.fragment;
 
-
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -22,7 +21,7 @@ import java.util.List;
 
 import abhi.com.popularmovies.R;
 import abhi.com.popularmovies.data.model.Favorite;
-import abhi.com.popularmovies.data.model.MovieData;
+import abhi.com.popularmovies.data.model.Movie;
 import abhi.com.popularmovies.data.model.Review;
 import abhi.com.popularmovies.data.model.Video;
 import abhi.com.popularmovies.rest.RetrofitService;
@@ -39,30 +38,35 @@ import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MovieFragment#newInstance} factory method to
+ * Activities that contain this fragment must implement the
+ * to handle interaction events.
+ * Use the {@link FavoriteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment {
+public class FavoriteFragment extends Fragment {
+
     private static final String MOVIE_POSTER_BASE_URL = "https://image.tmdb.org/t/p/w780";
     private static final String API_KEY = "" ;
 
-    @BindView(R.id.main_backdrop) ImageView posterBackground;
-    @BindView(R.id.movie_overview) TextView overview;
-    @BindView(R.id.main_toolbar) Toolbar toolbar;
+    @BindView(R.id.main_backdrop)
+    ImageView posterBackground;
+    @BindView(R.id.movie_overview)
+    TextView overview;
+    @BindView(R.id.main_toolbar)
+    Toolbar toolbar;
     @BindView(R.id.release_date) TextView releaseDate;
     @BindView(R.id.user_rating) TextView userRating;
     @BindView(R.id.trailers_recyclerView) RecyclerView trailerRecylerview;
     @BindView(R.id.reviews_recyclerView) RecyclerView reviewRecyclerView;
 
     @BindView(R.id.favorite_movie_button) FloatingActionButton FavoriteFab;
-
-    MovieData mMovieData;
     private RetrofitService.movieApiInterface mMovieApi;
+    private Movie mMovieData;
     private Realm realm;
     private List<Video> trailers;
     private List<Review> reviews;
 
-    public MovieFragment() {
+    public FavoriteFragment() {
         // Required empty public constructor
     }
 
@@ -70,14 +74,13 @@ public class MovieFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-
-     * @return A new instance of fragment MovieFragment.
+     * @return A new instance of fragment FavoriteFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MovieFragment newInstance(MovieData data) {
-        MovieFragment fragment = new MovieFragment();
+    public static FavoriteFragment newInstance(Movie movie) {
+        FavoriteFragment fragment = new FavoriteFragment();
         Bundle args = new Bundle();
-        args.putParcelable("mMovieData",data);
+        args.putParcelable("movie",movie);
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,14 +88,14 @@ public class MovieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mMovieApi = RetrofitService.getClient();
-        mMovieData = getArguments().getParcelable("mMovieData");
+        mMovieData = getArguments().getParcelable("movie");
 
         Realm.init(getContext());
 
         // Create the Realm instance
         realm = Realm.getDefaultInstance();
-
     }
 
     @Override
@@ -111,12 +114,12 @@ public class MovieFragment extends Fragment {
         userRating.setText(String.valueOf(mMovieData.getVoteAverage()));
         releaseDate.setText(mMovieData.getReleaseDate());
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         initTrailerRecyclerView();
         loadTrailers(mMovieData.getId(),API_KEY);
         loadReviews(mMovieData.getId(),API_KEY);
-        
+
 
         // add back arrow to toolbar
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null){
@@ -151,7 +154,7 @@ public class MovieFragment extends Fragment {
                         public void execute(Realm realm) {
                             RealmResults<Favorite> favorite = realm.where(Favorite.class).equalTo("id",mMovieData.getId()).findAll();
                             favorite.deleteAllFromRealm();
-                            Toast toast = Toast.makeText(getContext(),"Unsaved",Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getContext(),"UnSaved",Toast.LENGTH_SHORT);
                             toast.show();
 
                         }
@@ -169,7 +172,7 @@ public class MovieFragment extends Fragment {
             public void onResponse(Call<Video.Result> call, Response<Video.Result> response) {
                 Video.Result result = response.body();
                 trailers = result.getResults();
-                MovieTrailerAdapter movieTrailerAdapter = new MovieTrailerAdapter(MovieFragment.this,trailers);
+                MovieTrailerAdapter movieTrailerAdapter = new MovieTrailerAdapter(FavoriteFragment.this,trailers);
                 trailerRecylerview.setAdapter(movieTrailerAdapter);
             }
 
@@ -186,7 +189,7 @@ public class MovieFragment extends Fragment {
             public void onResponse(Call<Review.Result> call, Response<Review.Result> response) {
                 Review.Result result = response.body();
                 reviews = result.getResults();
-                ReviewsAdapter reviewsAdapter = new ReviewsAdapter(MovieFragment.this,reviews);
+                ReviewsAdapter reviewsAdapter = new ReviewsAdapter(FavoriteFragment.this,reviews);
                 reviewRecyclerView.setAdapter(reviewsAdapter);
             }
 

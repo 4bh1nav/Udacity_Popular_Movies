@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.realm.annotations.Ignore;
+
 public class MovieData implements Parcelable {
 
     @SerializedName("poster_path")
@@ -19,18 +21,22 @@ public class MovieData implements Parcelable {
     private String overview;
     @SerializedName("release_date")
     private String releaseDate;
+    @Ignore
     private List<Integer> genreIds = new ArrayList<Integer>();
+    @SerializedName("id")
     private Integer id;
     @SerializedName("original_title")
     private String originalTitle;
     private String originalLanguage;
     private String title;
+    @SerializedName("backdrop_path")
     private String backdropPath;
     private Double popularity;
     private Integer voteCount;
     private Boolean video;
     @SerializedName("vote_average")
     private Double voteAverage;
+    @Ignore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
@@ -38,6 +44,7 @@ public class MovieData implements Parcelable {
     }
 
     private MovieData(Parcel in){
+        id = in.readInt();
         overview = in.readString();
         title= in.readString();
         originalTitle= in.readString();
@@ -314,6 +321,7 @@ public class MovieData implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
 
+        out.writeInt(id);
         out.writeString(overview);
         out.writeString(title);
         out.writeString(originalTitle);
